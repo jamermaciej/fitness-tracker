@@ -23,4 +23,7 @@ export class PastTrainingsComponent implements OnInit, AfterViewInit {
     this.exercises.sort = this.sort;
   }
 
+  applyFilter(filterValue: string) {
+    this.exercises.filter = filterValue.trim().toLowerCase();
+  }
 }
