@@ -1,0 +1,16 @@
+.welcome {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 15% 0;
+
+    @media (min-width: 1200px) {
+        flex-direction: row;
+    }
+
+    section {
+        padding: 0 30px;
+    }
+}

@@ -1,0 +1,27 @@
+<section class="login-form">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field>
+            <input 
+                type="email" 
+                matInput 
+                placeholder="Your email" 
+                ngModel
+                name="email"
+                formControlName="email">
+            <mat-hint>Field must not be empty.</mat-hint>
+            <mat-error>E-Mail is invalid.</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <input 
+                type="password" 
+                matInput 
+                placeholder="Your password" 
+                ngModel
+                name="password"
+                formControlName="password">
+            <mat-hint>Should be at least 6 characters long.</mat-hint>
+            <mat-error>Password is required.</mat-error>
+        </mat-form-field>
+        <button type="submit" mat-raised-button color="primary" [disabled]="loginForm.invalid">Submit</button>
+    </form>
+</section>
