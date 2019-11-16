@@ -10,7 +10,7 @@ export class TrainingService {
     private runningExercise: Exercise;
     exerciseChanged = new Subject<Exercise>();
     exercisesChanged = new Subject<Exercise[]>();
-    private exercises: Exercise[] = [];
+    exercisesFinishedChanged = new Subject<Exercise[]>();
 
     constructor(private db: AngularFirestore) {}
 
@@ -66,8 +66,10 @@ export class TrainingService {
         return { ...this.runningExercise };
     }
 
-    getExercises() {
-        return this.exercises.slice();
+    fetchExercises() {
+        this.db.collection('finishedExercises').valueChanges().subscribe((exercises: Exercise[]) => {
+            this.exercisesFinishedChanged.next(exercises);
+        });
     }
 
     private addDataToDatabase(exercise: Exercise) {
