@@ -14,7 +14,7 @@ import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.com
 import { HeaderComponent } from './navigation/header/header.component';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
-import { TrainingModule } from './training/training.module';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [
@@ -29,8 +29,8 @@ import { TrainingModule } from './training/training.module';
     MaterialModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AuthModule,
-    TrainingModule
+    AngularFirestoreModule,
+    AuthModule
   ],
   providers: [AuthService, TrainingService, UIService],
   bootstrap: [AppComponent]
