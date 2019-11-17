@@ -1,4 +1,4 @@
-import { UIService } from './navigation/shared/ui.ervice';
+import { UIService } from './navigation/shared/ui.service';
 import { TrainingService } from './training/trainingService';
 import { AuthService } from './auth/auth.service';
 import { StopTrainingComponent } from './training/current-training/stop-training.component';

@@ -1,4 +1,4 @@
-import { UIService } from './../navigation/shared/ui.ervice';
+import { UIService } from '../navigation/shared/ui.service';
 import { Subject, Subscription } from 'rxjs';
 import { Exercise } from './models/exercise.model';
 import { AngularFirestore } from '@angular/fire/firestore';

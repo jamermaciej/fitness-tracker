@@ -1,4 +1,4 @@
-import { UIService } from './../../navigation/shared/ui.ervice';
+import { UIService } from '../../navigation/shared/ui.service';
 import { Subscription } from 'rxjs';
 import { Exercise } from './../models/exercise.model';
 import { NgForm } from '@angular/forms';
