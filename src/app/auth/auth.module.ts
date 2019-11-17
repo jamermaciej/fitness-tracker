@@ -1,9 +1,8 @@
+import { SharedModule } from './../navigation/shared/shared.module';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-import { MaterialModule } from './../material.module';
 import { LoginComponent } from './login/login.component';
 import { NgModule } from '@angular/core';
 import { SignupComponent } from './signup/signup.component';
-import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 @NgModule({
@@ -12,10 +11,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
         LoginComponent
     ],
     imports: [
-        CommonModule,
-        FormsModule,
+        SharedModule,
         ReactiveFormsModule,
-        MaterialModule,
         AngularFireAuthModule
     ],
     exports: []
