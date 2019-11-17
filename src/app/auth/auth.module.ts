@@ -1,3 +1,4 @@
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { MaterialModule } from './../material.module';
 import { LoginComponent } from './login/login.component';
 import { NgModule } from '@angular/core';
@@ -14,7 +15,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        MaterialModule
+        MaterialModule,
+        AngularFireAuthModule
     ],
     exports: []
 })
