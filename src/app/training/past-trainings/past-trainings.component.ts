@@ -35,6 +35,8 @@ export class PastTrainingsComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngOnDestroy() {
-    this.exercisesFinishedSubscription.unsubscribe();
+    if (this.exercisesFinishedSubscription) {
+      this.exercisesFinishedSubscription.unsubscribe();
+    }
   }
 }
