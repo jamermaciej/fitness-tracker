@@ -1,0 +1,28 @@
+<section class="add-training">
+    <form [formGroup]="addTrainingForm" (ngSubmit)="onSubmit()">
+        <mat-card>
+            <mat-card-title>Add new exercise</mat-card-title>
+            <mat-card-content>
+                <mat-form-field>
+                    <input type="text" matInput placeholder="Exercise name" name="name" formControlName="name">
+                    <mat-hint>Field must not be empty.</mat-hint>
+                    <mat-error>Exercise name is required</mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <input type="number" matInput placeholder="Calories burned" name="calories" formControlName="calories">
+                    <mat-hint>Field must not be empty.</mat-hint>
+                    <mat-error>Calories is required</mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <input type="number" matInput placeholder="Exercise duration" name="duration" formControlName="duration">
+                    <mat-hint>Field must not be empty.</mat-hint>
+                    <mat-error>Duration is required</mat-error>
+                </mat-form-field>
+            </mat-card-content>
+            <mat-card-actions>
+                <button type="submit" mat-raised-button color="primary"
+                    [disabled]="addTrainingForm.invalid">Add</button>
+            </mat-card-actions>
+        </mat-card>
+    </form>
+</section>

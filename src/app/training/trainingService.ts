@@ -4,6 +4,7 @@ import { Exercise } from './models/exercise.model';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class TrainingService {
@@ -15,7 +16,8 @@ export class TrainingService {
     private fbSubscription: Subscription[] = [];
 
     constructor(private db: AngularFirestore,
-                private uiService: UIService
+                private uiService: UIService,
+                private router: Router
             ) {}
 
     fetchAvailableExercises() {
@@ -45,6 +47,10 @@ export class TrainingService {
         }));
     }
 
+    addExercise(exercise: Exercise) {
+        this.db.collection('availableExercises').add(exercise);
+    }
+
     startExercise(selectedId: string) {
         this.runningExercise = this.availableExercises.find(exercise => exercise.id === selectedId);
         this.exerciseChanged.next({ ...this.runningExercise });
@@ -58,6 +64,7 @@ export class TrainingService {
         });
         this.runningExercise = null;
         this.exerciseChanged.next(null);
+        this.router.navigate(['/training/new-exercise']);
     }
 
     cancelExercise(progrss: number) {
@@ -70,6 +77,7 @@ export class TrainingService {
         });
         this.runningExercise = null;
         this.exerciseChanged.next(null);
+        this.router.navigate(['/training/new-exercise']);
     }
 
     getRunningExercise() {

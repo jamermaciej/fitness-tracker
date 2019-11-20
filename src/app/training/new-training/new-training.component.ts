@@ -4,6 +4,7 @@ import { Exercise } from './../models/exercise.model';
 import { NgForm } from '@angular/forms';
 import { TrainingService } from './../trainingService';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-training',
@@ -17,7 +18,8 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
   private loadingSubscription: Subscription;
 
   constructor(private trainingService: TrainingService,
-              private uiService: UIService
+              private uiService: UIService,
+              private router: Router
             ) { }
 
   ngOnInit() {
@@ -34,6 +36,7 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
 
   onStartTraining(form: NgForm) {
     this.trainingService.startExercise(form.value.exercise);
+    this.router.navigate(['/training/current-training']);
   }
 
   ngOnDestroy() {

@@ -22,7 +22,7 @@ export class AuthService {
             if (user) {
                 this.isAuthenticated = true;
                 this.authChange.next(true);
-                this.router.navigate(['/training']);
+                this.router.navigate(['/training/new-exercise']);
             } else {
                 this.trainingService.cancelSubscription();
                 this.afAuth.auth.signOut();

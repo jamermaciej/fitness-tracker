@@ -10,8 +10,24 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 export class TrainingComponent implements OnInit, OnDestroy {
   ongoingTraining = false;
   exerciseSubscription: Subscription;
+  tabLinks: any[];
 
-  constructor(private trainingService: TrainingService) { }
+  constructor(private trainingService: TrainingService) {
+    this.tabLinks = [
+      {
+          label: 'New exercise',
+          link: 'new-exercise',
+      },
+      {
+          label: 'Past exercise',
+          link: 'past-exercises'
+      },
+      {
+          label: 'Add exercise',
+          link: 'add-exercise'
+      }
+    ];
+  }
 
   ngOnInit() {
     this.exerciseSubscription = this.trainingService.exerciseChanged.subscribe(exercise => {

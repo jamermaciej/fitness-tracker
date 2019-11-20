@@ -1,0 +1,29 @@
+.add-training {
+    display: flex;
+    justify-content: center;
+    padding: 30px;
+    text-align: center;
+
+    @media (max-width: 544px) {
+        width: 100%;
+    }
+
+    mat-card {
+        width: 400px;
+    }
+
+    mat-form-field {
+        margin-bottom: 20px;
+    }
+
+    mat-card-title {
+        margin-bottom: 20px;
+    }
+
+    mat-card-content,
+    mat-card-actions {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+}
