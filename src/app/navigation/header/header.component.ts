@@ -8,16 +8,19 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  isAuth = false;
+  public isAuth: boolean;
   authSubscription: Subscription;
   @Output() sidenavToggle = new EventEmitter<void>();
 
-  constructor(private authService: AuthService) { }
+  constructor(public authService: AuthService) {
+    authService.isAuth().subscribe(isAuth => {
+      this.isAuth = isAuth;
+    });
+
+    this.isAuth = !!localStorage.getItem('isLogged');
+  }
 
   ngOnInit() {
-    this.authSubscription = this.authService.authChange.subscribe(authStatus => {
-      this.isAuth = authStatus;
-    });
   }
 
   onToggleSidenav() {

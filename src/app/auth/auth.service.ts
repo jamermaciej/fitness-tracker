@@ -1,21 +1,26 @@
 import { UIService } from '../navigation/shared/ui.service';
 import { TrainingService } from './../training/trainingService';
 import { AuthData } from './models/auth-data.model';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { User } from 'firebase';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class AuthService {
     authChange = new Subject<boolean>();
+    user: Observable<firebase.User>;
     private isAuthenticated: boolean;
 
     constructor(private router: Router,
                 private afAuth: AngularFireAuth,
                 private trainingService: TrainingService,
                 private uiService: UIService
-            ) {}
+            ) {
+                this.user = afAuth.authState;
+            }
 
     initAuthListener() {
         this.afAuth.authState.subscribe(user => {
@@ -54,6 +59,7 @@ export class AuthService {
             authData.password)
         .then(result => {
             this.uiService.loadingStateChanged.next(false);
+            localStorage.setItem('isLogged', 'true');
         })
         .catch(error => {
             this.uiService.loadingStateChanged.next(false);
@@ -62,10 +68,12 @@ export class AuthService {
     }
 
     logout() {
+        localStorage.removeItem('isLogged');
         this.afAuth.auth.signOut();
     }
 
-    isAuth() {
-        return this.isAuthenticated;
+    isAuth(): Observable<boolean> {
+        return this.user.pipe(
+            map(user => user && user.uid !== undefined));
     }
 }
