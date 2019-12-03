@@ -1,3 +1,6 @@
+import { CustomSerializer } from './store/reducers/router.reducer';
+import { metaReducers } from './store/reducers';
+import { reducers } from './store/reducers';
 import { AuthModule } from './auth/auth.module';
 import { UIService } from './navigation/shared/ui.service';
 import { TrainingService } from './training/trainingService';
@@ -15,6 +18,9 @@ import { HeaderComponent } from './navigation/header/header.component';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule} from '@ngrx/store-devtools';
+import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
 
 @NgModule({
   declarations: [
@@ -30,9 +36,20 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    AuthModule
+    AuthModule,
+    StoreModule.forRoot(reducers, {metaReducers}),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production
+    }),
+    StoreRouterConnectingModule.forRoot({stateKey: 'router'})
   ],
-  providers: [AuthService, TrainingService, UIService],
+  providers: [AuthService, TrainingService, UIService,
+    {
+      provide: RouterStateSerializer,
+      useClass: CustomSerializer
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
