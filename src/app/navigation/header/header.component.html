@@ -8,13 +8,13 @@
     <nav>
         <ul>
             <li>
-                <a *ngIf="!isAuth" routerLink="/signup" routerLinkActive="active">Signup</a>
+                <a *ngIf="!isAuth" [routerLink]="flowRoutes.SIGNUP" routerLinkActive="active">Signup</a>
             </li>
             <li>
-                <a *ngIf="!isAuth" routerLink="/login" routerLinkActive="active">Login</a>
+                <a *ngIf="!isAuth" [routerLink]="flowRoutes.LOGIN" routerLinkActive="active">Login</a>
             </li>
             <li>
-                <a *ngIf="isAuth" routerLink="/training" routerLinkActive="active">Training</a>
+                <a *ngIf="isAuth" [routerLink]="flowRoutes.TRAINING" routerLinkActive="active">Training</a>
             </li>
             <li>
                 <a *ngIf="isAuth" routerLinkActive="active" (click)="onLogout()">Logout</a>

@@ -1,3 +1,4 @@
+import { FlowRoutes } from './../../enums/flow';
 import { Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Subscription } from 'rxjs';
@@ -8,6 +9,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+  flowRoutes = FlowRoutes;
   public isAuth: boolean;
   authSubscription: Subscription;
   @Output() sidenavToggle = new EventEmitter<void>();
