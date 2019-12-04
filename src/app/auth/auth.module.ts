@@ -6,6 +6,7 @@ import { SignupComponent } from './signup/signup.component';
 import { AuthRoutingModule } from './auth-routing.module';
 import { StoreModule } from '@ngrx/store';
 import { reducers } from './store';
+import { NoAuthGuard } from './no-auth.guard';
 
 @NgModule({
     declarations: [
@@ -18,6 +19,7 @@ import { reducers } from './store';
         AuthRoutingModule,
         StoreModule.forFeature('auth', reducers)
     ],
-    exports: []
+    exports: [],
+    providers: [NoAuthGuard]
 })
 export class AuthModule {}
