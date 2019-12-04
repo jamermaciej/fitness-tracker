@@ -27,13 +27,11 @@ export class AuthService {
             if (user) {
                 this.isAuthenticated = true;
                 this.authChange.next(true);
-                this.router.navigate(['/training/new-exercise']);
             } else {
                 this.trainingService.cancelSubscription();
                 this.afAuth.auth.signOut();
                 this.isAuthenticated = false;
                 this.authChange.next(false);
-                this.router.navigate(['/login']);
             }
         });
     }
@@ -60,6 +58,7 @@ export class AuthService {
         .then(result => {
             this.uiService.loadingStateChanged.next(false);
             localStorage.setItem('isLogged', 'true');
+            this.router.navigate(['/training']);
         })
         .catch(error => {
             this.uiService.loadingStateChanged.next(false);
@@ -70,6 +69,7 @@ export class AuthService {
     logout() {
         localStorage.removeItem('isLogged');
         this.afAuth.auth.signOut();
+        this.router.navigate(['/login']);
     }
 
     isAuth(): Observable<boolean> {
