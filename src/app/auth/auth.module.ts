@@ -4,6 +4,8 @@ import { LoginComponent } from './login/login.component';
 import { NgModule } from '@angular/core';
 import { SignupComponent } from './signup/signup.component';
 import { AuthRoutingModule } from './auth-routing.module';
+import { StoreModule } from '@ngrx/store';
+import { reducers } from './store';
 
 @NgModule({
     declarations: [
@@ -13,7 +15,8 @@ import { AuthRoutingModule } from './auth-routing.module';
     imports: [
         SharedModule,
         AngularFireAuthModule,
-        AuthRoutingModule
+        AuthRoutingModule,
+        StoreModule.forFeature('auth', reducers)
     ],
     exports: []
 })
