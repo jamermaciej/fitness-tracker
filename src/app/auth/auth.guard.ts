@@ -1,3 +1,4 @@
+import { FlowRoutes } from './../enums/flow';
 import { AuthService } from './auth.service';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate, Router, CanLoad, Route } from '@angular/router';
@@ -12,12 +13,26 @@ export class AuthGuard implements CanActivate, CanLoad {
               private afAuth: AngularFireAuth,
             ) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    if (this.authService.isAuth()) {
-      return true;
-    } else {
-      this.router.navigate(['/login']);
-    }
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+    return this.authService.user.pipe(
+      take(1),
+      map(user => {
+        switch (state.url) {
+          case FlowRoutes.LOGIN:
+          case FlowRoutes.SIGNUP:
+            if ( user ) {
+              this.router.navigate([FlowRoutes.TRAINING]);
+            }
+            return !user;
+            break;
+          default:
+            if ( !user ) {
+              this.router.navigate([FlowRoutes.LOGIN]);
+            }
+            return !!user;
+        }
+      })
+    );
   }
 
   canLoad(router: Route): Observable<boolean> {

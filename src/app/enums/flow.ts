@@ -2,5 +2,5 @@ export enum FlowRoutes {
     INIT = '/',
     SIGNUP = '/signup',
     LOGIN = '/login',
-    TRAINING = '/training'
+    TRAINING = '/training/new-exercise'
 }
