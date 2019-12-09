@@ -67,9 +67,10 @@ export class AuthService {
     }
 
     logout() {
-        localStorage.removeItem('isLogged');
-        this.afAuth.auth.signOut();
-        this.router.navigate(['/login']);
+        this.afAuth.auth.signOut().then(() => {
+            localStorage.removeItem('isLogged');
+            this.router.navigate(['/login']);
+        });
     }
 
     isAuth(): Observable<boolean> {
