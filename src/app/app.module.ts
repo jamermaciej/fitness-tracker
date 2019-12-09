@@ -21,6 +21,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule} from '@ngrx/store-devtools';
 import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
+import { EffectsModule } from '@ngrx/effects';
+import { effects } from './store';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,7 @@ import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router
     AngularFirestoreModule,
     AuthModule,
     StoreModule.forRoot(reducers, {metaReducers}),
+    EffectsModule.forRoot(effects),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production
