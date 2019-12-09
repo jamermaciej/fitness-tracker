@@ -5,8 +5,10 @@ import { Subject, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { User } from 'firebase';
 import { map } from 'rxjs/operators';
+import * as fromRoot from '../store';
+import { Store } from '@ngrx/store';
+import * as fromUI from '../navigation/shared/store';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +19,8 @@ export class AuthService {
     constructor(private router: Router,
                 private afAuth: AngularFireAuth,
                 private trainingService: TrainingService,
-                private uiService: UIService
+                private uiService: UIService,
+                private store: Store<fromRoot.State>
             ) {
                 this.user = afAuth.authState;
             }
@@ -37,31 +40,37 @@ export class AuthService {
     }
 
     registerUser(authData: AuthData) {
-        this.uiService.loadingStateChanged.next(true);
+        this.store.dispatch(new fromUI.StartLoading);
+        // this.uiService.loadingStateChanged.next(true);
         this.afAuth.auth.createUserWithEmailAndPassword(
             authData.email,
             authData.password)
         .then(result => {
-            this.uiService.loadingStateChanged.next(false);
+            this.store.dispatch(new fromUI.StopLoading);
+            // this.uiService.loadingStateChanged.next(false);
         })
         .catch(error => {
-            this.uiService.loadingStateChanged.next(false);
+            this.store.dispatch(new fromUI.StopLoading);
+            // this.uiService.loadingStateChanged.next(false);
             this.uiService.showSnackbar(error, null, 3000);
         });
     }
 
     login(authData: AuthData) {
-        this.uiService.loadingStateChanged.next(true);
+        this.store.dispatch(new fromUI.StartLoading);
+        // this.uiService.loadingStateChanged.next(true);
         this.afAuth.auth.signInWithEmailAndPassword(
             authData.email,
             authData.password)
         .then(result => {
-            this.uiService.loadingStateChanged.next(false);
+            this.store.dispatch(new fromUI.StopLoading);
+            // this.uiService.loadingStateChanged.next(false);
             localStorage.setItem('isLogged', 'true');
             this.router.navigate(['/training']);
         })
         .catch(error => {
-            this.uiService.loadingStateChanged.next(false);
+            this.store.dispatch(new fromUI.StopLoading);
+            // this.uiService.loadingStateChanged.next(false);
             this.uiService.showSnackbar(error, null, 3000);
         });
     }
