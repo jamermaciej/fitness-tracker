@@ -12,3 +12,5 @@ export function reducer(
 ) {
     return state;
 }
+
+export const getVersion = (state: CoreState) => state.version;
