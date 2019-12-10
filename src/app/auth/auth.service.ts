@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators';
 import * as fromRoot from '../store';
 import { Store } from '@ngrx/store';
 import * as fromUI from '../navigation/shared/store';
+import * as fromAuth from '../auth/store';
 
 @Injectable()
 export class AuthService {
@@ -28,13 +29,15 @@ export class AuthService {
     initAuthListener() {
         this.afAuth.authState.subscribe(user => {
             if (user) {
-                this.isAuthenticated = true;
-                this.authChange.next(true);
+                // this.isAuthenticated = true;
+                // this.authChange.next(true);
+                this.store.dispatch(new fromAuth.SetAuthenticated());
             } else {
                 this.trainingService.cancelSubscription();
                 this.afAuth.auth.signOut();
-                this.isAuthenticated = false;
-                this.authChange.next(false);
+                // this.isAuthenticated = false;
+                // this.authChange.next(false);
+                this.store.dispatch(new fromAuth.SetUnauthenticated());
             }
         });
     }
