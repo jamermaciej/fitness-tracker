@@ -1,11 +1,12 @@
 import { UIService } from '../../navigation/shared/ui.service';
-import { Subscription, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Exercise } from './../models/exercise.model';
 import { NgForm } from '@angular/forms';
 import { TrainingService } from './../trainingService';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import * as fromTraining from '../store';
 import * as fromRoot from '../../store';
 
 @Component({
@@ -13,20 +14,19 @@ import * as fromRoot from '../../store';
   templateUrl: './new-training.component.html',
   styleUrls: ['./new-training.component.scss']
 })
-export class NewTrainingComponent implements OnInit, OnDestroy {
-  exercises: Exercise[];
-  private exerciseSubscription: Subscription;
+export class NewTrainingComponent implements OnInit {
+  exercises$: Observable<Exercise[]>;
   isLoading$: Observable<boolean>;
 
   constructor(private trainingService: TrainingService,
               private uiService: UIService,
               private router: Router,
-              private store: Store<fromRoot.State>
+              private store: Store<fromTraining.State>
             ) { }
 
   ngOnInit() {
-    this.exerciseSubscription = this.trainingService.exercisesChanged.subscribe(exercises => this.exercises = exercises);
     this.fetchExercises();
+    this.exercises$ = this.store.select(fromTraining.getAvailableExercises);
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
   }
 
@@ -37,11 +37,5 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
   onStartTraining(form: NgForm) {
     this.trainingService.startExercise(form.value.exercise);
     this.router.navigate(['/training/current-training']);
-  }
-
-  ngOnDestroy() {
-    if (this.exerciseSubscription) {
-      this.exerciseSubscription.unsubscribe();
-    }
   }
 }
