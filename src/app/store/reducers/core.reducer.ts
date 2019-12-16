@@ -1,4 +1,4 @@
-export interface CoreState {
+export interface State {
     version: string;
 }
 
@@ -9,8 +9,8 @@ export const initialState = {
 export function reducer(
     state = initialState,
     action
-) {
+): State {
     return state;
 }
 
-export const getVersion = (state: CoreState) => state.version;
+export const getVersion = (state: State) => state.version;

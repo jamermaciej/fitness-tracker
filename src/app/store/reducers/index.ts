@@ -8,8 +8,8 @@ import { RouterReducerState } from '@ngrx/router-store';
 import * as fromUI from '../../navigation/shared/store';
 
 export interface State {
-    ui: fromUI.UIState;
-    core: fromCore.CoreState;
+    ui: fromUI.State;
+    core: fromCore.State;
     router: fromRouter.RouterReducerState<RouterStateUrl>;
 }
 
@@ -24,8 +24,13 @@ export const metaReducers: MetaReducer<any>[] = !environment.production
   : [];
 
 export const getRouterState = createFeatureSelector<fromRouter.RouterReducerState<RouterStateUrl>>('routerReducer');
-export const getCoreState = createFeatureSelector<fromCore.CoreState>('core');
-export const getUIState = createFeatureSelector<fromUI.UIState>('ui');
+
+export const getCoreRootState = createFeatureSelector<State>('core');
+export const getCoreState = createSelector(getCoreRootState, (state: State) => state.core);
+
+export const getUIRootState = createFeatureSelector<State>('ui');
+export const getUIState = createSelector(getUIRootState, (state: State) => state.ui);
+
 export const getVersion = createSelector(getCoreState, fromCore.getVersion);
 export const getIsLoading = createSelector(getUIState, fromUI.getIsLoading);
 

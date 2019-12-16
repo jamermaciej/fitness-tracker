@@ -1,18 +1,17 @@
-import { UIState } from './ui.reducer';
 import * as fromUI from '../actions/ui.action';
 
-export interface UIState {
+export interface State {
     isLoading: boolean;
 }
 
-export const initialState: UIState = {
+export const initialState: State = {
     isLoading: false
 }
 
 export function redcuer(
     state = initialState,
     action: fromUI.UIActions
-): UIState {
+): State {
     switch(action.type) {
         case fromUI.UITypes.START_LOADING: {
             return {
@@ -30,4 +29,4 @@ export function redcuer(
     }
 }
 
-export const getIsLoading = (state: UIState) => state.isLoading;
+export const getIsLoading = (state: State) => state.isLoading;
