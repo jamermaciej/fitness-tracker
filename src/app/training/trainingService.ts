@@ -1,5 +1,5 @@
 import { UIService } from '../navigation/shared/ui.service';
-import { Subject, Subscription, from } from 'rxjs';
+import { Subject, Subscription, from, combineLatest } from 'rxjs';
 import { Exercise } from './models/exercise.model';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map, take } from 'rxjs/operators';
@@ -7,7 +7,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import * as fromUI from '../navigation/shared/store';
 import * as fromTraining from './store';
-import { Store } from '@ngrx/store';
+import * as fromAuth from '../auth/store';
+import { Store } from '@ngrx/store'; 
 
 @Injectable()
 export class TrainingService {
@@ -59,11 +60,15 @@ export class TrainingService {
     }
 
     completeExercise() {
-        this.store.select(fromTraining.getActiveTraining).pipe(take(1)).subscribe(activeTraining => {
+        combineLatest([
+            this.store.select(fromTraining.getActiveTraining),
+            this.store.select(fromAuth.getUser)
+        ]).pipe(take(1)).subscribe(([activeTraining, user]) => {
             this.addDataToDatabase({
                 ...activeTraining,
                 date: new Date(),
-                state: 'completed'
+                state: 'completed',
+                userId: user.uid
             });
             this.store.dispatch(new fromTraining.StopTraining());
             this.router.navigate(['/training/new-exercise']); 
@@ -71,13 +76,17 @@ export class TrainingService {
     }
 
     cancelExercise(progrss: number) {
-        this.store.select(fromTraining.getActiveTraining).pipe(take(1)).subscribe(activeTraining => {
+        combineLatest([
+            this.store.select(fromTraining.getActiveTraining),
+            this.store.select(fromAuth.getUser)
+        ]).pipe(take(1)).subscribe(([activeTraining, user]) => {
             this.addDataToDatabase({
                 ...activeTraining,
                 duration: activeTraining.duration * (progrss / 100),
                 calories: activeTraining.calories * (progrss / 100),
                 date: new Date(),
-                state: 'cancelled'
+                state: 'cancelled',
+                userId: user.uid
             });
             this.store.dispatch(new fromTraining.StopTraining());
             this.router.navigate(['/training/new-exercise']);
@@ -85,9 +94,13 @@ export class TrainingService {
     }
 
     fetchExercises() {
-        this.fbSubscription.push(this.db.collection('finishedExercises').valueChanges().subscribe((exercises: Exercise[]) => {
-            this.store.dispatch(new fromTraining.SetFinishedExercise(exercises));
-        }));
+        this.store.select(fromAuth.getUser).subscribe(user => {
+            if (user) {
+                this.fbSubscription.push(this.db.collection('finishedExercises', ref => ref.where('userId', '==', user.uid)).valueChanges().subscribe((exercises: Exercise[]) => {
+                    this.store.dispatch(new fromTraining.SetFinishedExercise(exercises));
+                }));
+            }
+        });
     }
 
     cancelSubscription() {

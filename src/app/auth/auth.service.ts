@@ -1,7 +1,7 @@
 import { UIService } from '../navigation/shared/ui.service';
 import { TrainingService } from './../training/trainingService';
 import { AuthData } from './models/auth-data.model';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, from } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -10,6 +10,8 @@ import * as fromRoot from '../store';
 import { Store } from '@ngrx/store';
 import * as fromUI from '../navigation/shared/store';
 import * as fromAuth from '../auth/store';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { User } from './models/user.model';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +23,8 @@ export class AuthService {
                 private afAuth: AngularFireAuth,
                 private trainingService: TrainingService,
                 private uiService: UIService,
-                private store: Store<fromRoot.State>
+                private store: Store<fromRoot.State>,
+                private db: AngularFirestore
             ) {
                 this.user = afAuth.authState;
             }
@@ -32,12 +35,17 @@ export class AuthService {
                 // this.isAuthenticated = true;
                 // this.authChange.next(true);
                 this.store.dispatch(new fromAuth.SetAuthenticated());
+                this.db.collection('users', ref => ref.where('uid', '==', user.uid)).valueChanges().subscribe(user => {
+                    const [ userData ] = user;
+                    this.store.dispatch(new fromAuth.SetUser(userData as User));
+                });
             } else {
                 this.trainingService.cancelSubscription();
                 this.afAuth.auth.signOut();
                 // this.isAuthenticated = false;
                 // this.authChange.next(false);
                 this.store.dispatch(new fromAuth.SetUnauthenticated());
+                this.store.dispatch(new fromAuth.ClearUser());
             }
         });
     }
@@ -49,6 +57,19 @@ export class AuthService {
             authData.email,
             authData.password)
         .then(result => {
+            const { uid, displayName, email, emailVerified, phoneNumber, photoURL } = result.user;
+            const { creationTime, lastSignInTime } = result.user.metadata;
+            return this.db.collection('users').doc(result.user.uid).set({
+                uid,
+                displayName,
+                email,
+                emailVerified,
+                creationTime,
+                lastSignInTime,
+                phoneNumber,
+                photoURL
+            });
+        }).then(() => {
             this.store.dispatch(new fromUI.StopLoading);
             // this.uiService.loadingStateChanged.next(false);
         })
