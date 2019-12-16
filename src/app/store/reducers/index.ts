@@ -25,11 +25,8 @@ export const metaReducers: MetaReducer<any>[] = !environment.production
 
 export const getRouterState = createFeatureSelector<fromRouter.RouterReducerState<RouterStateUrl>>('routerReducer');
 
-export const getCoreRootState = createFeatureSelector<State>('core');
-export const getCoreState = createSelector(getCoreRootState, (state: State) => state.core);
-
-export const getUIRootState = createFeatureSelector<State>('ui');
-export const getUIState = createSelector(getUIRootState, (state: State) => state.ui);
+export const getCoreState = createFeatureSelector<fromCore.State>('core');
+export const getUIState = (state: State) => state.ui;
 
 export const getVersion = createSelector(getCoreState, fromCore.getVersion);
 export const getIsLoading = createSelector(getUIState, fromUI.getIsLoading);
