@@ -1,23 +1,22 @@
 import { Exercise } from './../../models/exercise.model';
 import * as fromTraining from '../index';
 
-export interface TrainingState {
+export interface State {
     availableExercises: Exercise[];
     finishedExercises: Exercise[];
     activeTraining: Exercise;
 }
 
-export const initialState: TrainingState = {
+export const initialState: State = {
     availableExercises: [],
     finishedExercises: [],
     activeTraining: null
 }
 
-
 export function reducer(
     state = initialState,
     action: fromTraining.TrainingActions
-) {
+): State {
     switch(action.type) {
         case fromTraining.TrainingTypes.SET_AVAILABLE_EXERCISE: {
             return {
@@ -49,8 +48,8 @@ export function reducer(
     }
 }
 
-export const getAvailableExercises = (state: TrainingState) => state.availableExercises;
-export const getFinishedExercises = (state: TrainingState) => state.finishedExercises;
-export const getActiveTraining = (state: TrainingState) => state.activeTraining;
+export const getAvailableExercises = (state: State) => state.availableExercises;
+export const getFinishedExercises = (state: State) => state.finishedExercises;
+export const getActiveTraining = (state: State) => state.activeTraining;
 
-export const getIsTraining = (state: TrainingState) => state.activeTraining != null;
+export const getIsTraining = (state: State) => state.activeTraining != null;

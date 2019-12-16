@@ -4,15 +4,19 @@ import * as fromTraining from './training.reducer';
 import * as fromRoot from '../../../store';
 
 export interface State extends fromRoot.State {
-    training: fromTraining.TrainingState;
+    training: TrainingState;
 }
 
-export const reducers = {
+export interface TrainingState {
+    training: fromTraining.State;
+}
+
+export const reducers: ActionReducerMap<TrainingState> = {
     training: fromTraining.reducer
 }
 
-export const getTrainingState = createFeatureSelector<State>('training');
-export const getTraining = createSelector(getTrainingState, (state: State) => state.training);
+export const getTrainingState = createFeatureSelector<TrainingState>('training');
+export const getTraining = createSelector(getTrainingState, (state: TrainingState) => state.training);
 
 export const getAvailableExercises = createSelector(getTraining, fromTraining.getAvailableExercises);
 export const getFinishedExercises = createSelector(getTraining, fromTraining.getFinishedExercises);
