@@ -2,7 +2,7 @@ import { UIService } from '../navigation/shared/ui.service';
 import { Subject, Subscription, from, combineLatest } from 'rxjs';
 import { Exercise } from './models/exercise.model';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { map, take, filter, switchMap } from 'rxjs/operators';
+import { map, take, filter, switchMap, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import * as fromUI from '../navigation/shared/store';
@@ -95,7 +95,7 @@ export class TrainingService {
 
     fetchExercises() {
         this.store.select(fromAuth.getUser).pipe(
-            filter(user => !!user.uid),
+            filter(user => !!user),
             switchMap((user) => {
                 return this.db.collection('finishedExercises', ref => ref.where('userId', '==', user.uid)).valueChanges();
             })
