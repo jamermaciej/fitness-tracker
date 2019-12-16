@@ -1,3 +1,4 @@
+import { FlowRoutes } from './../enums/flow';
 import { UIService } from '../navigation/shared/ui.service';
 import { TrainingService } from './../training/trainingService';
 import { AuthData } from './models/auth-data.model';
@@ -90,7 +91,7 @@ export class AuthService {
             this.store.dispatch(new fromUI.StopLoading);
             // this.uiService.loadingStateChanged.next(false);
             localStorage.setItem('isLogged', 'true');
-            this.router.navigate(['/training']);
+            this.router.navigate([FlowRoutes.TRAINING]);
         })
         .catch(error => {
             this.store.dispatch(new fromUI.StopLoading);
