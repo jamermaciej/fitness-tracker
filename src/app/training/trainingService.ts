@@ -2,13 +2,13 @@ import { UIService } from '../navigation/shared/ui.service';
 import { Subject, Subscription, from, combineLatest } from 'rxjs';
 import { Exercise } from './models/exercise.model';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { map, take } from 'rxjs/operators';
+import { map, take, filter, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import * as fromUI from '../navigation/shared/store';
 import * as fromTraining from './store';
 import * as fromAuth from '../auth/store';
-import { Store } from '@ngrx/store'; 
+import { Store } from '@ngrx/store';
 
 @Injectable()
 export class TrainingService {
@@ -20,35 +20,35 @@ export class TrainingService {
     private fbSubscription: Subscription[] = [];
 
     constructor(private db: AngularFirestore,
-                private uiService: UIService,
-                private router: Router,
-                private store: Store<fromTraining.State>
-            ) {}
+        private uiService: UIService,
+        private router: Router,
+        private store: Store<fromTraining.State>
+    ) { }
 
     fetchAvailableExercises() {
         this.store.dispatch(new fromUI.StartLoading());
         this.fbSubscription.push(this.db
-        .collection('availableExercises')
-        .snapshotChanges()
-        .pipe(
-          map(docArray => {
-            return docArray.map(doc => {
-              return {
-                id: doc.payload.doc.id,
-                name: doc.payload.doc.data()['name'],
-                duration: doc.payload.doc.data()['duration'],
-                calories: doc.payload.doc.data()['calories']
-              };
-            });
-          })
-        ).subscribe((exercise: Exercise[]) => {
-            this.store.dispatch(new fromTraining.SetAvailableExercise(exercise));
-            this.store.dispatch(new fromUI.StopLoading());
-        }, error => {
-            this.store.dispatch(new fromUI.StopLoading());
-            this.uiService.showSnackbar('Fetching exercises failed, please try again later.', null, 3000);
-            this.exercisesChanged.next(null);
-        }));
+            .collection('availableExercises')
+            .snapshotChanges()
+            .pipe(
+                map(docArray => {
+                    return docArray.map(doc => {
+                        return {
+                            id: doc.payload.doc.id,
+                            name: doc.payload.doc.data()['name'],
+                            duration: doc.payload.doc.data()['duration'],
+                            calories: doc.payload.doc.data()['calories']
+                        };
+                    });
+                })
+            ).subscribe((exercise: Exercise[]) => {
+                this.store.dispatch(new fromTraining.SetAvailableExercise(exercise));
+                this.store.dispatch(new fromUI.StopLoading());
+            }, error => {
+                this.store.dispatch(new fromUI.StopLoading());
+                this.uiService.showSnackbar('Fetching exercises failed, please try again later.', null, 3000);
+                this.exercisesChanged.next(null);
+            }));
     }
 
     addExercise(exercise: Exercise) {
@@ -71,7 +71,7 @@ export class TrainingService {
                 userId: user.uid
             });
             this.store.dispatch(new fromTraining.StopTraining());
-            this.router.navigate(['/training/new-exercise']); 
+            this.router.navigate(['/training/new-exercise']);
         });
     }
 
@@ -94,12 +94,13 @@ export class TrainingService {
     }
 
     fetchExercises() {
-        this.store.select(fromAuth.getUser).subscribe(user => {
-            if (user) {
-                this.fbSubscription.push(this.db.collection('finishedExercises', ref => ref.where('userId', '==', user.uid)).valueChanges().subscribe((exercises: Exercise[]) => {
-                    this.store.dispatch(new fromTraining.SetFinishedExercise(exercises));
-                }));
-            }
+        this.store.select(fromAuth.getUser).pipe(
+            filter(user => !!user.uid),
+            switchMap((user) => {
+                return this.db.collection('finishedExercises', ref => ref.where('userId', '==', user.uid)).valueChanges();
+            })
+        ).subscribe((exercises: Exercise[])  => {
+            this.store.dispatch(new fromTraining.SetFinishedExercise(exercises));
         });
     }
 
