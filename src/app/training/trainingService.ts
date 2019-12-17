@@ -2,7 +2,7 @@ import { UIService } from '../navigation/shared/ui.service';
 import { Subject, Subscription, from, combineLatest } from 'rxjs';
 import { Exercise } from './models/exercise.model';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { map, take, filter, switchMap, tap } from 'rxjs/operators';
+import { map, take, filter, switchMap, tap, takeUntil } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import * as fromUI from '../navigation/shared/store';
@@ -18,6 +18,7 @@ export class TrainingService {
     exercisesChanged = new Subject<Exercise[]>();
     exercisesFinishedChanged = new Subject<Exercise[]>();
     private fbSubscription: Subscription[] = [];
+    destroySubject$: Subject<void> = new Subject();
 
     constructor(private db: AngularFirestore,
         private uiService: UIService,
@@ -98,8 +99,9 @@ export class TrainingService {
             filter(user => !!user),
             switchMap((user) => {
                 return this.db.collection('finishedExercises', ref => ref.where('userId', '==', user.uid)).valueChanges();
-            })
-        ).subscribe((exercises: Exercise[])  => {
+            }),
+            takeUntil(this.destroySubject$)
+        ).subscribe((exercises: Exercise[]) => {
             this.store.dispatch(new fromTraining.SetFinishedExercise(exercises));
         });
     }
@@ -110,5 +112,10 @@ export class TrainingService {
 
     private addDataToDatabase(exercise: Exercise) {
         this.db.collection('finishedExercises').add(exercise);
+    }
+
+    ngOnDestroy(): void {
+        this.destroySubject$.next();
+        this.destroySubject$.complete();
     }
 }
