@@ -22,7 +22,11 @@
             <mat-hint>Should be at least 6 characters long.</mat-hint>
             <mat-error>Password is required.</mat-error>
         </mat-form-field>
-        <button *ngIf="!(isLoading$ | async)" type="submit" mat-raised-button color="primary" [disabled]="loginForm.invalid">Submit</button>
-        <mat-spinner *ngIf="isLoading$ | async"></mat-spinner>
+        <button type="submit" mat-raised-button color="primary" [disabled]="loginForm.invalid">
+            <span *ngIf="!(isLoading$ | async)">Submit</span>
+            <mat-icon *ngIf="isLoading$ | async">
+                <mat-spinner color="warn" diameter="20"></mat-spinner>
+            </mat-icon>
+        </button>
     </form>
 </section>

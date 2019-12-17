@@ -17,7 +17,7 @@
                 <a *ngIf="isAuth" [routerLink]="flowRoutes.TRAINING" routerLinkActive="active">Training</a>
             </li>
             <li>
-                <a *ngIf="isAuth" routerLinkActive="active" (click)="onLogout()">Logout</a>
+                <a class="pointer" *ngIf="isAuth" routerLinkActive="active" (click)="onLogout()">Logout</a>
             </li>
         </ul>
     </nav>
