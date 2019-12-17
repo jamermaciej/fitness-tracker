@@ -15,7 +15,7 @@
         </mat-card-content>
         <mat-card-actions *ngIf="!(isLoading$ | async)">
             <button *ngIf="exercises$ | async" type="submit" [disabled]="f.invalid" mat-button>Start</button>
-            <button *ngIf="!(exercises$) | async" type="button" mat-button (click)="fetchExercises()">Fetch again</button>
+            <button *ngIf="!(exercises$ | async)" type="button" mat-button (click)="fetchExercises()">Fetch again</button>
         </mat-card-actions>
     </mat-card>
   </form>
