@@ -72,6 +72,7 @@ export class AuthService {
             });
         }).then(() => {
             this.store.dispatch(new fromUI.StopLoading);
+            this.router.navigate([FlowRoutes.TRAINING]);
             // this.uiService.loadingStateChanged.next(false);
         })
         .catch(error => {
