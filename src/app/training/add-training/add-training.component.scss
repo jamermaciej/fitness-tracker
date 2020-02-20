@@ -31,3 +31,27 @@
         margin: 0 auto;
     }
 }
+
+.ico-preview {
+    max-width: 50px;
+    margin-top: 10px;
+}
+
+.upload-section {
+    display: flex;
+    flex-direction: column;
+
+    &-buttons {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    img {
+        margin: 0 0 5px;
+    }
+
+    span {
+        padding: 10px 0;
+        text-align: left;
+    }
+}

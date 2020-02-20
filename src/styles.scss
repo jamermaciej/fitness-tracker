@@ -7,6 +7,18 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     cursor: pointer;
 }
 
+.hide {
+    display: none;
+}
+
 button {
     width: 140px;
+}
+
+// select style
+
+.mat-option {
+    .mat-option-text {
+        display: flex;
+    }
 }

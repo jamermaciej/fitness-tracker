@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromTraining from '../store';
 import * as fromRoot from '../../store';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 @Component({
   selector: 'app-new-training',

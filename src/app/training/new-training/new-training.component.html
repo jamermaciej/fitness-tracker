@@ -7,6 +7,7 @@
                     <mat-label>Select type of training</mat-label>
                     <mat-select ngModel name="exercise" required>
                       <mat-option *ngFor="let exercise of exercises$ | async" [value]="exercise.id">
+                          <img *ngIf="exercise.icon" [src]="exercise.icon">
                         {{ exercise.name}}
                       </mat-option>
                     </mat-select>

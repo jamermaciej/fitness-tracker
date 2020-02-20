@@ -5,6 +5,7 @@ import { TrainingService } from '../trainingService';
 import * as fromTraining from '../store';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs/operators';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 @Component({
   selector: 'app-current-training',
@@ -14,10 +15,12 @@ import { take } from 'rxjs/operators';
 export class CurrentTrainingComponent implements OnInit {
   progress = 0;
   timer: any;
+  iconUrl;
 
   constructor(private dialog: MatDialog,
               private trainingService: TrainingService,
-              private store: Store<fromTraining.State>
+              private store: Store<fromTraining.State>,
+              private afStorage: AngularFireStorage
             ) { }
 
   ngOnInit() {
@@ -27,6 +30,10 @@ export class CurrentTrainingComponent implements OnInit {
   startOrResumeTimer() {
     this.store.select(fromTraining.getActiveTraining).pipe(take(1)).subscribe(activeTraining => {
       const step = activeTraining.duration / 100 * 1000;
+      const iconName = activeTraining.iconName;
+
+      this.iconUrl = this.afStorage.ref(`uploads/${iconName}`).getDownloadURL();
+
       this.timer = setInterval(() => {
         this.progress += 1;
         if (this.progress >= 100) {

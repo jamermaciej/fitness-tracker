@@ -9,15 +9,32 @@
                     <mat-error>Exercise name is required</mat-error>
                 </mat-form-field>
                 <mat-form-field>
-                    <input type="number" matInput placeholder="Calories burned" name="calories" formControlName="calories">
+                    <input type="number" matInput placeholder="Calories burned" name="calories"
+                        formControlName="calories">
                     <mat-hint>Field must not be empty.</mat-hint>
                     <mat-error>Calories is required</mat-error>
                 </mat-form-field>
                 <mat-form-field>
-                    <input type="number" matInput placeholder="Exercise duration" name="duration" formControlName="duration">
+                    <input type="number" matInput placeholder="Exercise duration" name="duration"
+                        formControlName="duration">
                     <mat-hint>Field must not be empty.</mat-hint>
                     <mat-error>Duration is required</mat-error>
                 </mat-form-field>
+                <div class="upload-section">
+                    <mat-progress-bar *ngIf="disabledProgress" mode="determinate" [value]="uploadProgress">
+                    </mat-progress-bar>
+                    <span *ngIf="disabledProgress" class="upload-progress">{{ uploadProgress | number: '1.0-0' }}
+                        %</span>
+                    <img class="ico-preview" *ngIf="downloadURL" [src]="downloadURL">
+                    <div class="upload-section-buttons">
+                        <input class="hide" id="icon" name="icon" multiple type="file" (change)="detectFiles($event)"
+                            accept=".png,.jpg,.svg">
+                        <label for="icon" class="mat-raised-button mat-button-base mat-primary">Add icon</label>
+                        <button type="button" *ngIf="fileName" mat-raised-button color="primary"
+                            (click)="uploadFile();">Upload icon</button>
+                    </div>
+                    <span>{{ fileName }}</span>
+                </div>
             </mat-card-content>
             <mat-card-actions>
                 <button type="submit" mat-raised-button color="primary"

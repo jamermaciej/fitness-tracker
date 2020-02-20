@@ -18,6 +18,7 @@ import { HeaderComponent } from './navigation/header/header.component';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule} from '@ngrx/store-devtools';
 import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
@@ -38,6 +39,7 @@ import { effects } from './store';
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
+    AngularFireStorageModule,
     AuthModule,
     StoreModule.forRoot(reducers, {metaReducers}),
     EffectsModule.forRoot(effects),

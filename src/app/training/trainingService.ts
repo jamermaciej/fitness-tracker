@@ -3,7 +3,7 @@ import { Subject, Subscription, from, combineLatest } from 'rxjs';
 import { Exercise } from './models/exercise.model';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map, take, filter, switchMap, tap, takeUntil } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import * as fromUI from '../navigation/shared/store';
 import * as fromTraining from './store';
@@ -11,7 +11,7 @@ import * as fromAuth from '../auth/store';
 import { Store } from '@ngrx/store';
 
 @Injectable()
-export class TrainingService {
+export class TrainingService implements OnDestroy {
     private availableExercises: Exercise[] = [];
     private runningExercise: Exercise;
     exerciseChanged = new Subject<Exercise>();
@@ -21,9 +21,9 @@ export class TrainingService {
     destroySubject$: Subject<void> = new Subject();
 
     constructor(private db: AngularFirestore,
-        private uiService: UIService,
-        private router: Router,
-        private store: Store<fromTraining.State>
+                private uiService: UIService,
+                private router: Router,
+                private store: Store<fromTraining.State>
     ) { }
 
     fetchAvailableExercises() {
@@ -38,7 +38,9 @@ export class TrainingService {
                             id: doc.payload.doc.id,
                             name: doc.payload.doc.data()['name'],
                             duration: doc.payload.doc.data()['duration'],
-                            calories: doc.payload.doc.data()['calories']
+                            calories: doc.payload.doc.data()['calories'],
+                            icon: doc.payload.doc.data()['icon'],
+                            iconName: doc.payload.doc.data()['iconName']
                         };
                     });
                 })
