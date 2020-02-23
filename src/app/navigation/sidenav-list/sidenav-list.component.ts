@@ -1,3 +1,4 @@
+import { FlowRoutes } from './../../enums/flow';
 import { AuthService } from './../../auth/auth.service';
 import { Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
@@ -13,6 +14,7 @@ import * as fromAuth from '../../auth/store';
 export class SidenavListComponent implements OnInit, OnDestroy {
   isAuth$: Observable<boolean>;
   authSubscription: Subscription;
+  flowRoutes = FlowRoutes;
   @Output() closeSidenav = new EventEmitter<void>();
 
   constructor(private authService: AuthService, private store: Store<fromRoot.State>) { }
